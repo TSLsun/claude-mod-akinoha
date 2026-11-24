@@ -1,1 +1,1 @@
-{ "name": "akinoha", "version": "0.1.0", "description": "秋葉：日式簡約的秋日金黃主題，落葉越積越厚代表 context 用量越高", "types": "./types/index.d.ts", "license": "MIT" }
+{ "name": "akinoha", "version": "0.1.1", "description": "秋葉：日式簡約的秋日金黃主題，落葉越積越厚代表 context 用量越高", "types": "./types/index.d.ts", "license": "MIT" }
