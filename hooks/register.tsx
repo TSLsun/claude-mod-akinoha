@@ -5,7 +5,9 @@ import { makeColors } from './make-colors.js'
 import { makeScene } from './scene'
 
 const percentAtom = atom({ plugin: 'akinoha', key: 'percent' } as const, null)
-const notifiedAtom = atom({ plugin: 'akinoha', key: 'notified' } as const, 0)
+// The pile's level alone: the backdrop reads only this, so it redraws (and its
+// leaves restart) only when the level changes, never on every response.
+const levelAtom = atom({ plugin: 'akinoha', key: 'level' } as const, 0)
 
 // Washi paper by day, a warm sumi room by lamplight at night.
 const { theme, problems } = makeColors({
@@ -98,12 +100,12 @@ async function record($: EngineInterface, pct: number | null): Promise<void> {
   $.ui.status(pct === null ? undefined : `🍂 ${pct}%`)
 
   const level = levelOf(pct)
-  const notified = await read($, notifiedAtom)
-  if (level > notified && level >= 3) {
+  const previous = await read($, levelAtom)
+  if (level > previous && level >= 3) {
     const text = TOASTS[level]
     if (text) $.ui.toast(text)
   }
-  if (level !== notified) await update($, notifiedAtom, () => level)
+  if (level !== previous) await update($, levelAtom, () => level)
 }
 
 export const register: Register = on => {
@@ -136,7 +138,7 @@ export const register: Register = on => {
       return next(e)
     }
     const { Svg } = $.ui.resolve(e)
-    const level = levelOf(await read($, percentAtom))
+    const level = await read($, levelAtom)
 
     return (
       <Svg
