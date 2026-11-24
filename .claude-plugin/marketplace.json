@@ -1,0 +1,5 @@
+{
+  "name": "claude-mod-akinoha",
+  "owner": { "name": "TSLsun" },
+  "plugins": [{ "name": "akinoha", "source": "./" }]
+}
